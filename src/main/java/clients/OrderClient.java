@@ -1,3 +1,5 @@
+package clients;
+
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
 
@@ -8,7 +10,7 @@ public class OrderClient extends Client{
     private static final String PATH_ORDER = "api/orders";
 
     @Step("Создание заказа")
-    public ValidatableResponse createOrder(Ingredients ingredients) {
+    public ValidatableResponse createOrder(String ingredients) {
         return given()
                 .spec(getSpec())
                 .log().all()
@@ -20,7 +22,7 @@ public class OrderClient extends Client{
     }
 
     @Step("Создание заказа")
-    public ValidatableResponse getUserOrders(Ingredients ingredients) {
+    public ValidatableResponse getUserOrders(String ingredients) {
         return given()
                 .spec(getSpec())
                 .log().all()

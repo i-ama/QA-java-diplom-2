@@ -1,3 +1,7 @@
+package clients;
+
+import io.restassured.authentication.AuthenticationScheme;
+import io.restassured.authentication.OAuth2Scheme;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
@@ -12,4 +16,11 @@ public class Client {
                 .setBaseUri(BASE_URL)
                 .build();
     }
+
+    /*protected RequestSpecification getSpecWithAuthorization() {
+        return new RequestSpecBuilder()
+                .setContentType(ContentType.JSON)
+                .setBaseUri(BASE_URL)
+                .build();
+    }*/
 }
