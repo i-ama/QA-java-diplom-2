@@ -1,6 +1,5 @@
 package clients;
 
-import io.restassured.authentication.OAuth2Scheme;
 import models.UserCredentials;
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
@@ -40,14 +39,39 @@ public class UserClient extends Client {
                 .log().all();
     }
 
-    @Step("Изменение данных пользователя")
-    public ValidatableResponse updateUser(String accessToken) {
+    @Step("Изменение данных пользователя c авторизацией")
+    public ValidatableResponse updateUserWithAuthorization(String accessToken, User newUser) {
+        return given()
+                .spec(getSpec())
+                .header("Authorization", accessToken)
+                .log().all()
+                .body(newUser)
+                .when()
+                .patch(PATH_UPDATE_USER)
+                .then()
+                .log().all();
+    }
+
+    @Step("Изменение данных пользователя без авторизации")
+    public ValidatableResponse updateUserWithoutAuthorization(User newUser) {
         return given()
                 .spec(getSpec())
                 .log().all()
-                .body(accessToken)
+                .body(newUser)
                 .when()
                 .patch(PATH_UPDATE_USER)
+                .then()
+                .log().all();
+    }
+
+    @Step("Получение данных пользователя")
+    public ValidatableResponse getUserData(String accessToken) {
+        return given()
+                .spec(getSpec())
+                .header("Authorization", accessToken)
+                .log().all()
+                .when()
+                .get(PATH_UPDATE_USER)
                 .then()
                 .log().all();
     }
@@ -56,8 +80,8 @@ public class UserClient extends Client {
     public ValidatableResponse deleteUser(String accessToken) {
         return given()
                 .spec(getSpec())
+                .header("Authorization", accessToken)
                 .log().all()
-                .body(accessToken)
                 .when()
                 .delete(PATH_UPDATE_USER)
                 .then()
@@ -68,8 +92,8 @@ public class UserClient extends Client {
     public ValidatableResponse logoutUser(String refreshToken) {
         return given()
                 .spec(getSpec())
+                .header("Authorization", refreshToken)
                 .log().all()
-                .body(refreshToken)
                 .when()
                 .post(PATH_LOGOUT_USER)
                 .then()
