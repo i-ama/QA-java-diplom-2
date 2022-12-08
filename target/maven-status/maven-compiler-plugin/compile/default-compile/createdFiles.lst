@@ -1,9 +1,0 @@
-clients\UserClient.class
-clients\OrderClient.class
-models\User.class
-clients\IngredientClient.class
-generators\UserGeneratorData.class
-clients\Client.class
-models\UserCredentials.class
-models\Ingredient.class
-models\Order.class

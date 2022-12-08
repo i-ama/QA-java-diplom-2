@@ -8,12 +8,9 @@ import models.User;
 import static io.restassured.RestAssured.given;
 
 public class UserClient extends Client {
-
     private static final String PATH_REGISTER_USER = "api/auth/register";
     private static final String PATH_LOGIN_USER = "api/auth/login";
-    private static final String PATH_LOGOUT_USER = "api/auth/logout";
     private static final String PATH_UPDATE_USER = "api/auth/user";
-/*    private static final String PATH_REFRESH_TOKEN = "api/auth/token";*/
 
     @Step("Создание пользователя")
     public ValidatableResponse createUser(User user) {
@@ -64,18 +61,6 @@ public class UserClient extends Client {
                 .log().all();
     }
 
-    @Step("Получение данных пользователя")
-    public ValidatableResponse getUserData(String accessToken) {
-        return given()
-                .spec(getSpec())
-                .header("Authorization", accessToken)
-                .log().all()
-                .when()
-                .get(PATH_UPDATE_USER)
-                .then()
-                .log().all();
-    }
-
     @Step("Удаление пользователя")
     public ValidatableResponse deleteUser(String accessToken) {
         return given()
@@ -87,28 +72,4 @@ public class UserClient extends Client {
                 .then()
                 .log().all();
     }
-
-    @Step("Выход пользователя из системы")
-    public ValidatableResponse logoutUser(String refreshToken) {
-        return given()
-                .spec(getSpec())
-                .header("Authorization", refreshToken)
-                .log().all()
-                .when()
-                .post(PATH_LOGOUT_USER)
-                .then()
-                .log().all();
-    }
-
-/*    @Step("Обновление токена")
-    public ValidatableResponse updateUser(Token token) {
-        return given()
-                .spec(getSpec())
-                .log().all()
-                .body(token)
-                .when()
-                .post(PATH_REFRESH_TOKEN)
-                .then()
-                .log().all();
-    }*/
 }

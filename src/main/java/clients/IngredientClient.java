@@ -10,12 +10,12 @@ public class IngredientClient extends Client{
     private static final String PATH_GET_INGREDIENTS = "api/ingredients";
 
     @Step("Получение данных об ингредиентах")
-    public ValidatableResponse createOrder() {
+    public ValidatableResponse getIngredients() {
         return given()
                 .spec(getSpec())
                 .log().all()
                 .when()
-                .post(PATH_GET_INGREDIENTS)
+                .get(PATH_GET_INGREDIENTS)
                 .then()
                 .log().all();
     }

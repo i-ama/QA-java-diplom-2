@@ -1,5 +1,0 @@
-UserCanNotBeLoginWithExistDataTest.class
-NotEnoughDataToCreateUserTest.class
-UserCanBeCreatedAndLoginTests.class
-UserUpdateDataTest.class
-UserCanNotBeCreateWithExistDataTest.class

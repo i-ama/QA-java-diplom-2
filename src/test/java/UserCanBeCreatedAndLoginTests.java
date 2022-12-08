@@ -40,7 +40,6 @@ public class UserCanBeCreatedAndLoginTests {
         accessToken = responseCreateUser.extract().path("accessToken");
         assertEquals("Incorrect success message", SC_OK, actualStatusCode);
         assertTrue("Incorrect status code", actualResponseSuccess);
-        userClient.deleteUser(accessToken);
     }
 
     @Test
@@ -53,6 +52,5 @@ public class UserCanBeCreatedAndLoginTests {
         accessToken = responseCreateUser.extract().path("accessToken");
         assertEquals("Incorrect success message", SC_OK, actualStatusCode);
         assertTrue("Incorrect status code", actualResponseSuccess);
-        userClient.deleteUser(accessToken);
     }
 }

@@ -12,8 +12,6 @@ import static org.apache.http.HttpStatus.SC_OK;
 import static org.junit.Assert.*;
 
 public class UserCanNotBeCreateWithExistDataTest {
-
-
     private UserClient userClient;
     private User firstUser;
     private User secondUser;

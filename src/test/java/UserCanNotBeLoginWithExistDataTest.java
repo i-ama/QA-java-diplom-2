@@ -15,7 +15,6 @@ import static org.junit.Assert.assertFalse;
 
 @RunWith(Parameterized.class)
 public class UserCanNotBeLoginWithExistDataTest {
-
     private UserClient userClient;
     private User user;
     private User changedUser;
@@ -52,16 +51,13 @@ public class UserCanNotBeLoginWithExistDataTest {
     public void UserCanNotBeLoginWithExistData() {
         ValidatableResponse responseCreateUser = userClient.createUser(user);
         accessToken = responseCreateUser.extract().path("accessToken");
-
         ValidatableResponse responseLoginUser = userClient.loginUser(UserCredentials.from(changedUser));
         actualStatusCode = responseLoginUser.extract().statusCode();
         actualResponseSuccess = responseLoginUser.extract().path("success");
         actualResponseMessage = responseLoginUser.extract().path("message");
-
         assertEquals("Incorrect success status", expectedStatusCode, actualStatusCode);
         assertFalse("Incorrect status code", actualResponseSuccess);
         assertEquals("Incorrect response message", expectedResponseMessage, actualResponseMessage);
-
         userClient.deleteUser(accessToken);
     }
 }

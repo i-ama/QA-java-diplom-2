@@ -13,6 +13,7 @@ public class UserGeneratorData {
     static private String secondEmail = RandomStringUtils.randomAlphabetic(7).toLowerCase(Locale.ROOT) + "@ru.ru";
     static private String secondPassword = RandomStringUtils.randomAlphabetic(7);
     static private String secondName = RandomStringUtils.randomAlphabetic(7);
+    static private String thirdEmail = RandomStringUtils.randomAlphabetic(7).toLowerCase(Locale.ROOT) + "@ru.ru";
 
     public static User getDefault() {
         return new User(email, password, name);
@@ -20,6 +21,14 @@ public class UserGeneratorData {
 
     public static User getDefaultSecond() {
         return new User(secondEmail, secondPassword, secondName);
+    }
+
+    public static User getDefaultThird() {
+        return new User(thirdEmail, secondPassword, secondName);
+    }
+
+    public static User getDefaultForth() {
+        return new User(thirdEmail, secondPassword, secondName);
     }
 
     public static User getDefaultChangedEmail() {
