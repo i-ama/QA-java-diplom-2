@@ -49,12 +49,10 @@ public class NotEnoughDataToCreateUserTest {
         actualStatusCode = responseCreateUser.extract().statusCode();
         actualResponseSuccess = responseCreateUser.extract().path("success");
         actualResponseMessage = responseCreateUser.extract().path("message");
-
-        if (actualStatusCode == SC_OK) {
-            accessToken = responseCreateUser.extract().path("accessToken");
-            userClient.deleteUser(accessToken);
-        }
-
+            if (actualStatusCode == SC_OK) {
+                accessToken = responseCreateUser.extract().path("accessToken");
+                userClient.deleteUser(accessToken);
+            }
         assertEquals("Incorrect success status", expectedStatusCode, actualStatusCode);
         assertFalse("Incorrect status code", actualResponseSuccess);
         assertEquals("Incorrect response message", expectedResponseMessage, actualResponseMessage);

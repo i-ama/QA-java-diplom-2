@@ -38,7 +38,7 @@ public class UserUpdateDataTests {
     }
 
     @Test
-    @DisplayName("Успешное изменение данных пользователя с авторизацией")
+    @DisplayName("Попытка изменения данных пользователя без авторизациии")
     public void UserCanNotToBeUpdateWithoutAuthorization() {
         ValidatableResponse responseCreateUser = userClient.createUser(userOld);
         accessToken = responseCreateUser.extract().path("accessToken");
@@ -50,6 +50,7 @@ public class UserUpdateDataTests {
         assertFalse("Incorrect status code on update", actualUpdateUserResponseSuccess);
         assertEquals("Incorrect message on update", expectedUpdateUserResponseMessage, actualUpdateUserResponseMessage);
     }
+
     @Test
     @DisplayName("Успешное изменение данных пользователя с авторизацией: проверка изменений путем логина с помощью обновленных данных")
     public void UserCanBeUpdateWithAuthorization() {

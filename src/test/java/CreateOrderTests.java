@@ -22,15 +22,11 @@ public class CreateOrderTests {
     private OrderClient orderClient;
     private IngredientClient ingredientClient;
     private List<String> listOfIngredientsId;
-
     private UserClient userClient;
     private User user;
     private String accessToken;
-
     private int expectedStatusCode;
-
     private int actualStatusCode;
-
     private int randomIngredientsSelector;
     private String wrongHashIngredient;
 
@@ -38,7 +34,6 @@ public class CreateOrderTests {
         this.user = user;
         this.randomIngredientsSelector = randomIngredientsSelector;
         this.expectedStatusCode = expectedStatusCode;
-
         this.wrongHashIngredient = wrongHashIngredient;
     }
 
@@ -81,7 +76,6 @@ public class CreateOrderTests {
         userClient = new UserClient();
         ValidatableResponse responseCreateUser = userClient.createUser(user);
         accessToken = responseCreateUser.extract().path("accessToken");
-
         orderClient = new OrderClient();
         Ingredient ingredient = new Ingredient(listOfIngredientsId);
         ValidatableResponse responseCreateOrder = orderClient.createOrderWithAuthorization(accessToken, ingredient);
