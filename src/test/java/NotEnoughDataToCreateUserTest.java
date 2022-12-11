@@ -3,6 +3,7 @@ import generators.UserGeneratorData;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import models.User;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +29,7 @@ public class NotEnoughDataToCreateUserTest {
         this.expectedResponseMessage = expectedResponseMessage;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Тестовые данные: {0} {1} {2}")
     public static Object[][]  getTestData() {
         return new Object[][] {
                 {UserGeneratorData.getWithoutPassword(), SC_FORBIDDEN, "Email, password and name are required fields"},
@@ -42,17 +43,21 @@ public class NotEnoughDataToCreateUserTest {
         userClient = new UserClient();
     }
 
+    @After
+    public void cleanUp() {
+        if (actualStatusCode == SC_OK) {
+            userClient.deleteUser(accessToken);
+        }
+    }
+
     @Test
     @DisplayName("Параметризированный тест по созданию пользователя с неполными данными")
-    public void NotEnoughDataToCreateUser() {
+    public void notEnoughDataToCreateUser() {
         ValidatableResponse responseCreateUser = userClient.createUser(user);
         actualStatusCode = responseCreateUser.extract().statusCode();
         actualResponseSuccess = responseCreateUser.extract().path("success");
         actualResponseMessage = responseCreateUser.extract().path("message");
-            if (actualStatusCode == SC_OK) {
-                accessToken = responseCreateUser.extract().path("accessToken");
-                userClient.deleteUser(accessToken);
-            }
+        accessToken = responseCreateUser.extract().path("accessToken");
         assertEquals("Incorrect success status", expectedStatusCode, actualStatusCode);
         assertFalse("Incorrect status code", actualResponseSuccess);
         assertEquals("Incorrect response message", expectedResponseMessage, actualResponseMessage);

@@ -39,7 +39,7 @@ public class UserUpdateDataTests {
 
     @Test
     @DisplayName("Попытка изменения данных пользователя без авторизациии")
-    public void UserCanNotToBeUpdateWithoutAuthorization() {
+    public void userCanNotToBeUpdateWithoutAuthorization() {
         ValidatableResponse responseCreateUser = userClient.createUser(userOld);
         accessToken = responseCreateUser.extract().path("accessToken");
         ValidatableResponse responseUpdateUser = userClient.updateUserWithoutAuthorization(userNew);
@@ -53,21 +53,21 @@ public class UserUpdateDataTests {
 
     @Test
     @DisplayName("Успешное изменение данных пользователя с авторизацией: проверка изменений путем логина с помощью обновленных данных")
-    public void UserCanBeUpdateWithAuthorization() {
+    public void userCanBeUpdateWithAuthorization() {
         ValidatableResponse responseCreateUser = userClient.createUser(userOld);
         accessToken = responseCreateUser.extract().path("accessToken");
         ValidatableResponse responseUpdateUser = userClient.updateUserWithAuthorization(accessToken, userNew);
         actualUpdateUserStatusCode = responseUpdateUser.extract().statusCode();
         actualUpdateUserResponseSuccess = responseUpdateUser.extract().path("success");
-        assertEquals("Incorrect success message on update", SC_OK, actualUpdateUserStatusCode);
-        assertTrue("Incorrect status code on update", actualUpdateUserResponseSuccess);
         ValidatableResponse responseLoginUserWithUpdatedCredential = userClient.loginUser(UserCredentials.from(userNew));
         actualLoginStatusCode = responseLoginUserWithUpdatedCredential.extract().statusCode();
         actualUpdateUserResponseSuccess = responseLoginUserWithUpdatedCredential.extract().path("success");
-        assertEquals("Incorrect success message on login", SC_OK, actualLoginStatusCode);
-        assertTrue("Incorrect status code on update", actualUpdateUserResponseSuccess);
         actualLoginUserResponseSuccess = responseLoginUserWithUpdatedCredential.extract().path("success");
         actualName = responseLoginUserWithUpdatedCredential.extract().path("user.name");
+        assertEquals("Incorrect success message on update", SC_OK, actualUpdateUserStatusCode);
+        assertTrue("Incorrect status code on update", actualUpdateUserResponseSuccess);
+        assertEquals("Incorrect success message on login", SC_OK, actualLoginStatusCode);
+        assertTrue("Incorrect status code on update", actualUpdateUserResponseSuccess);
         assertTrue("Incorrect status code", actualLoginUserResponseSuccess);
         assertEquals("Incorrect success message", userNew.getName(), actualName);
     }

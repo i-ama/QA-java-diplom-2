@@ -31,6 +31,9 @@ public class UserCanNotBeCreateWithExistDataTest {
     @After
     public void cleanUp() {
         userClient.deleteUser(accessFirstToken);
+        if (actualSecondStatusCode == SC_OK) {
+            userClient.deleteUser(accessSecondToken);
+        }
     }
 
     @Test
@@ -40,14 +43,11 @@ public class UserCanNotBeCreateWithExistDataTest {
         ValidatableResponse responseCreateSecondUser = userClient.createUser(secondUser);
         actualSecondStatusCode = responseCreateSecondUser.extract().statusCode();
         actualSecondResponseMessage = responseCreateSecondUser.extract().path("message");
-        assertEquals("Incorrect success message", SC_FORBIDDEN, actualSecondStatusCode);
-        assertEquals("Incorrect message",expectedResponseMessage, actualSecondResponseMessage);
-            if (actualSecondStatusCode == SC_OK) {
-                accessSecondToken = responseCreateSecondUser.extract().path("accessToken");
-                userClient.deleteUser(accessSecondToken);
-            }
+        accessSecondToken = responseCreateSecondUser.extract().path("accessToken");
         accessFirstToken = responseCreateFirstUser.extract().path("accessToken");
         userClient.deleteUser(accessFirstToken);
+        assertEquals("Incorrect success message", SC_FORBIDDEN, actualSecondStatusCode);
+        assertEquals("Incorrect message",expectedResponseMessage, actualSecondResponseMessage);
     }
 
 }

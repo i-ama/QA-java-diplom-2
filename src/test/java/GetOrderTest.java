@@ -6,6 +6,7 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import models.Ingredient;
 import models.User;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,9 +41,16 @@ public class GetOrderTest {
         user = UserGeneratorData.getDefault();
     }
 
+    @After
+    public void cleanUp() {
+        if (accessToken != null) {
+            userClient.deleteUser(accessToken);
+        }
+    }
+
     @Test
     @DisplayName("Тест для попытки получить заказы пользователя без авторизацией")
-    public void GetOrderWithoutAuthorization() {
+    public void getOrderWithoutAuthorization() {
         orderClient = new OrderClient();
         Ingredient ingredient = new Ingredient(listOfIngredientsId);
         orderClient.createOrderWithoutAuthorization(ingredient);
@@ -53,7 +61,7 @@ public class GetOrderTest {
 
     @Test
     @DisplayName("Тест для получения заказов пользователя с авторизацией")
-    public void GetOrderWithAuthorization() {
+    public void getOrderWithAuthorization() {
         userClient = new UserClient();
         ValidatableResponse responseCreateUser = userClient.createUser(user);
         accessToken = responseCreateUser.extract().path("accessToken");
@@ -65,6 +73,5 @@ public class GetOrderTest {
         isResponseSuccessTrue = responseGetOrder.extract().path("success");
         assertEquals("Incorrect success message", SC_OK, actualStatusCode);
         assertTrue("Response success false", isResponseSuccessTrue);
-        userClient.deleteUser(accessToken);
     }
 }

@@ -33,7 +33,7 @@ public class UserCanBeCreatedAndLoginTests {
 
     @Test
     @DisplayName("Успешное создание нового пользователя")
-    public void UserCanBeCreated() {
+    public void userCanBeCreated() {
         ValidatableResponse responseCreateUser = userClient.createUser(user);
         actualStatusCode = responseCreateUser.extract().statusCode();
         actualResponseSuccess = responseCreateUser.extract().path("success");
@@ -44,7 +44,7 @@ public class UserCanBeCreatedAndLoginTests {
 
     @Test
     @DisplayName("Успешная авторизация пользователя")
-    public void UserCanBeLogin() {
+    public void userCanBeLogin() {
         userClient.createUser(user);
         ValidatableResponse responseCreateUser = userClient.loginUser(UserCredentials.from(user));
         actualStatusCode = responseCreateUser.extract().statusCode();

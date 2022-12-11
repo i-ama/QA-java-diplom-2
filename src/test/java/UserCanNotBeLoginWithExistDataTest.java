@@ -4,6 +4,7 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import models.User;
 import models.UserCredentials;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +33,7 @@ public class UserCanNotBeLoginWithExistDataTest {
         this.expectedResponseMessage = expectedResponseMessage;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Тестовые данные: {0} {1} {2}")
     public static Object[][]  getTestData() {
         return new Object[][] {
                 {UserGeneratorData.getDefault(), UserGeneratorData.getDefaultChangedEmail(), SC_UNAUTHORIZED, "email or password are incorrect"},
@@ -46,9 +47,14 @@ public class UserCanNotBeLoginWithExistDataTest {
         userClient = new UserClient();
     }
 
+    @After
+    public void cleanUp() {
+        userClient.deleteUser(accessToken);
+    }
+
     @Test
     @DisplayName("Параметризированный тест для попытки авторизации с невалидными password или email")
-    public void UserCanNotBeLoginWithExistData() {
+    public void userCanNotBeLoginWithExistData() {
         ValidatableResponse responseCreateUser = userClient.createUser(user);
         accessToken = responseCreateUser.extract().path("accessToken");
         ValidatableResponse responseLoginUser = userClient.loginUser(UserCredentials.from(changedUser));
@@ -58,6 +64,5 @@ public class UserCanNotBeLoginWithExistDataTest {
         assertEquals("Incorrect success status", expectedStatusCode, actualStatusCode);
         assertFalse("Incorrect status code", actualResponseSuccess);
         assertEquals("Incorrect response message", expectedResponseMessage, actualResponseMessage);
-        userClient.deleteUser(accessToken);
     }
 }

@@ -7,6 +7,7 @@ import io.restassured.response.ValidatableResponse;
 import models.Ingredient;
 import models.User;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +38,7 @@ public class CreateOrderTests {
         this.wrongHashIngredient = wrongHashIngredient;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Тестовые данные: {0} {1} {2} {4}")
     public static Object[][]  getTestData() {
         return new Object[][] {
                 {UserGeneratorData.getDefault(), (int)(Math.random()*13), SC_OK, null},
@@ -60,9 +61,16 @@ public class CreateOrderTests {
         System.out.println(listOfIngredientsId);
     }
 
+    @After
+    public void cleanUp() {
+        if (accessToken != null) {
+            userClient.deleteUser(accessToken);
+        }
+    }
+
     @Test
     @DisplayName("Параметризованный тест для успешного создания заказа без авторизацией")
-    public void CreateOrderWithoutAuthorization() {
+    public void createOrderWithoutAuthorization() {
         orderClient = new OrderClient();
         Ingredient ingredient = new Ingredient(listOfIngredientsId);
         ValidatableResponse responseCreateOrder = orderClient.createOrderWithoutAuthorization(ingredient);
@@ -72,7 +80,7 @@ public class CreateOrderTests {
 
     @Test
     @DisplayName("Параметризованный тест для успешного создания заказа с авторизацией")
-    public void CreateOrderWithAuthorization() {
+    public void createOrderWithAuthorization() {
         userClient = new UserClient();
         ValidatableResponse responseCreateUser = userClient.createUser(user);
         accessToken = responseCreateUser.extract().path("accessToken");
@@ -81,6 +89,5 @@ public class CreateOrderTests {
         ValidatableResponse responseCreateOrder = orderClient.createOrderWithAuthorization(accessToken, ingredient);
         actualStatusCode = responseCreateOrder.extract().statusCode();
         assertEquals("Incorrect success message", expectedStatusCode, actualStatusCode);
-        userClient.deleteUser(accessToken);
     }
 }
